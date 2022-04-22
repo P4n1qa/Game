@@ -1,22 +1,23 @@
 using System;
 using System.Collections.Generic;
+using IInterface;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public class PoolMono<T> where T: MonoBehaviour
+public class PoolMono<T> where T : MonoBehaviour
 {
     public T Prefab { get; }
     public bool AutoExpand { get; set; }
     public Transform Container { get; }
 
-    private List<T> pool;
+    private List<T> _pool;
 
-    public PoolMono(T prefab, int count)
+    /*public PoolMono(T prefab, int count)
     {
         this.Prefab = prefab;
         this.Container = null;
         this.CreatePool(count);
-    }
+    }*/
     
     public PoolMono(T prefab, int count , Transform container)
     {
@@ -27,7 +28,7 @@ public class PoolMono<T> where T: MonoBehaviour
 
     private void CreatePool(int count)
     {
-        this.pool = new List<T>();
+        this._pool = new List<T>();
         for (int i = 0; i < count; i++)
         {
             this.CreateObject();
@@ -38,13 +39,13 @@ public class PoolMono<T> where T: MonoBehaviour
     {
         var createdObject = Object.Instantiate(this.Prefab, this.Container);
         createdObject.gameObject.SetActive(isActiveByDefault);
-        this.pool.Add(createdObject);
+        this._pool.Add(createdObject);
         return createdObject;
     }
 
     public bool HasFreeElement(out T element)
     {
-        foreach (var mono in pool)
+        foreach (var mono in _pool)
         {
             if (!mono.gameObject.activeInHierarchy)
             {
