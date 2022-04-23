@@ -8,17 +8,22 @@ public class PlayerController : MonoBehaviour
 {
    [SerializeField] private float _speed;
    [SerializeField] private GameObject _snowBall;
-   
+
    private SliderPower _sliderPower;
    private bool _canShot;
    
    public int _health;
+   
    private void Start()
    {
       _sliderPower = FindObjectOfType<SliderPower>().GetComponent<SliderPower>();
       _canShot = true;
    }
 
+   public void GetDamage()
+   {
+      _health -= 1;
+   }
    private void Move()
    {
       transform.position += new Vector3(0, _speed, 0) * Input.GetAxis("Vertical");
