@@ -1,5 +1,6 @@
 using UnityEngine;
 
-public class EnemyLevel1 : Enemy 
+public class EnemyLevel1 : Enemy   
 {
+  
 }

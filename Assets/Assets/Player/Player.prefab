@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8185059225112671810}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,4 +124,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 0.01
   _snowBall: {fileID: 9009024026000361487, guid: 91720de0d2be7864b91586e787c93fb9, type: 3}
-  _health: 3
+  Health: 3

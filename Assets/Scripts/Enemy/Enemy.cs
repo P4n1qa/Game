@@ -1,18 +1,21 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private GameObject _bullet;
-    [SerializeField] private float _forceBullet;
-    [SerializeField] private float _duractionShot;
+    [SerializeField] private EnemySettings EnemySettings;
+    [SerializeField] private int _levelEnemy;
     
     private NavMeshAgent _navMeshAgent;
+    private PoolUse _poolUse;
+    private SliderHealhEnemy _sliderHealhEnemy;
+    private float _forceBullet;
+    private float _duractionShot;
+    private int _health;
+
 
     private void OnEnable()
     {
@@ -20,6 +23,32 @@ public class Enemy : MonoBehaviour
         _navMeshAgent.updateRotation = false;
         _navMeshAgent.updateUpAxis = false;
         StartCoroutine(CR_StartShot());
+        GetInfo();
+    }
+
+    private void GetInfo()
+    {
+        _health = EnemySettings.ListEnemySettings[_levelEnemy].Health;
+        _forceBullet = EnemySettings.ListEnemySettings[_levelEnemy].ForceBullet;
+        _duractionShot = EnemySettings.ListEnemySettings[_levelEnemy].DuractionShot;
+    }
+    private void Start()
+    {
+        _poolUse = FindObjectOfType<PoolUse>().GetComponent<PoolUse>();
+        _sliderHealhEnemy = GetComponentInChildren<SliderHealhEnemy>();
+    }
+    public void GetDamage()
+    {
+        
+        if (_health > 1)
+        {
+            _health -= 1;
+            _sliderHealhEnemy.RestoreSlider(_health);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     public void StartEnemy()
@@ -29,8 +58,7 @@ public class Enemy : MonoBehaviour
 
     public void Shot()
     {
-        GameObject newBullet = Instantiate(_bullet, transform.position, quaternion.identity);
-        newBullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(-_forceBullet, 0));
+        _poolUse.CreateEnemyWeapon(this.transform , _forceBullet);
     }
 
     private IEnumerator CR_StartShot()

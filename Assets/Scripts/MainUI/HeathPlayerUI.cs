@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -15,10 +12,12 @@ public class HeathPlayerUI : MonoBehaviour
       _playerController = FindObjectOfType<PlayerController>().GetComponent<PlayerController>();
       
       RestoreHealth();
+      
+      _playerController.GetDamaged += RestoreHealth;
    }
 
    private void RestoreHealth()
    {
-      _health.text = _playerController._health.ToString();
+      _health.text = _playerController.Health.ToString();
    }
 }

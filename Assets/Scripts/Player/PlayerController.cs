@@ -1,28 +1,30 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
    [SerializeField] private float _speed;
-   [SerializeField] private GameObject _snowBall;
 
    private SliderPower _sliderPower;
    private bool _canShot;
+   private PoolUse _poolUse;
    
-   public int _health;
+   public int Health;
+   public event Action GetDamaged;
    
    private void Start()
    {
       _sliderPower = FindObjectOfType<SliderPower>().GetComponent<SliderPower>();
       _canShot = true;
+      _poolUse = FindObjectOfType<PoolUse>().GetComponent<PoolUse>();
    }
 
    public void GetDamage()
    {
-      _health -= 1;
+      Health -= 1;
+      GetDamaged?.Invoke();
    }
    private void Move()
    {
@@ -40,8 +42,7 @@ public class PlayerController : MonoBehaviour
 
    private IEnumerator CR_Shot()
    {
-      GameObject SnowBall = Instantiate(_snowBall, gameObject.transform.position, quaternion.identity);
-      SnowBall.GetComponent<Rigidbody2D>().AddForce(new Vector2(_sliderPower.Slider.value, 0));
+      _poolUse.CreatePlayerWeapon(this.transform , _sliderPower.Slider.value);
       _canShot = false;
       yield return new WaitForSeconds(2f);
       _canShot = true;
